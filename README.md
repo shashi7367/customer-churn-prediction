@@ -1,5 +1,8 @@
 # Customer Churn Prediction System
 
+## Live Demo
+[Click Here to View Live App](https://customer-churn-prediction-n34scmu8nxf9utir83qmgl.streamlit.app/)
+
 ## Project Overview
 AI-powered system to predict customer churn using Machine Learning with business impact analysis.
 
@@ -20,13 +23,12 @@ AI-powered system to predict customer churn using Machine Learning with business
 
 ## Features
 - Real-time churn prediction
-- SHAP explainability — WHY customer will churn
 - Business impact analysis
 - AI-powered retention recommendations
-- Interactive dashboard
+- Interactive dashboard with Gauge chart
 
 ## How to Run
-pip install streamlit xgboost shap plotly pandas
+pip install streamlit xgboost shap plotly pandas scikit-learn
 streamlit run app.py
 
 ## Business Impact
@@ -37,3 +39,4 @@ streamlit run app.py
 
 ## Author
 Shashi Ranjan
+GitHub: https://github.com/shashi7367
