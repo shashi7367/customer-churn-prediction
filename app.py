@@ -4,12 +4,17 @@ import pandas as pd
 import numpy as np
 import pickle
 import plotly.graph_objects as go
+import os
 
-# Load model
-with open('/Users/shashiranjan/Downloads/Churn_Prevention/model.pkl', 'rb') as f:
+# Relative path use karo
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+with open(os.path.join(BASE_DIR, 'model.pkl'), 'rb') as f:
     model = pickle.load(f)
-with open('/Users/shashiranjan/Downloads/Churn_Prevention/features.pkl', 'rb') as f:
+with open(os.path.join(BASE_DIR, 'features.pkl'), 'rb') as f:
     feature_names = pickle.load(f)
+
+df = pd.read_csv(os.path.join(BASE_DIR, 'churn_data.csv'))
 
 def get_recommendation(churn_prob, monthly_charges, tenure):
     recommendations = []
@@ -33,11 +38,10 @@ def get_recommendation(churn_prob, monthly_charges, tenure):
     net_saving = revenue_at_risk - retention_cost
     return risk_level, recommendations, revenue_at_risk, retention_cost, net_saving
 
-st.set_page_config(page_title="Customer Churn Prevention", page_icon="🏢", layout="wide")
+st.set_page_config(page_title="Customer Churn Prediction", page_icon="🏢", layout="wide")
 st.title("🏢 Customer Churn Prediction System")
 st.markdown("---")
 
-# Top metrics
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Total Customers", "7,043")
 col2.metric("High Risk", "892 🔴")
@@ -46,7 +50,6 @@ col4.metric("Model Accuracy", "87%")
 
 st.markdown("---")
 
-# Sidebar inputs
 st.sidebar.title("Customer Details Bharo")
 tenure = st.sidebar.slider("Tenure (Months)", 0, 72, 12)
 monthly_charges = st.sidebar.number_input("Monthly Charges (Rs.)", 20.0, 120.0, 65.0)
@@ -87,12 +90,9 @@ if st.sidebar.button("🔍 Predict Churn", use_container_width=True):
     )
 
     col1, col2 = st.columns(2)
-
     with col1:
         st.subheader("Prediction Result")
         st.markdown(f"### {risk_level}")
-
-        # Gauge chart
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
             value=churn_prob * 100,
@@ -117,13 +117,11 @@ if st.sidebar.button("🔍 Predict Churn", use_container_width=True):
         m1.metric("Revenue at Risk", f"Rs. {revenue_at_risk:,.0f}")
         m2.metric("Retention Cost", f"Rs. {retention_cost:,.0f}")
         m3.metric("Net Saving", f"Rs. {net_saving:,.0f}")
-
         st.subheader("AI Recommendations")
         for r in recommendations:
             st.write(r)
 
     st.markdown("---")
-    st.subheader("Customer Summary")
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Tenure", f"{tenure} months")
     c2.metric("Monthly Bill", f"Rs. {monthly_charges:.0f}")
@@ -131,4 +129,4 @@ if st.sidebar.button("🔍 Predict Churn", use_container_width=True):
     c4.metric("Internet", internet)
 
 st.markdown("---")
-st.caption("Built with XGBoost + SHAP + Streamlit | AI-Powered Churn Prevention")
+st.caption("Built with XGBoost + SHAP + Streamlit | Customer Churn Prediction")
